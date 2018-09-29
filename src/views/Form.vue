@@ -40,18 +40,14 @@ import Flash from '@/helpers/flash'
 import { toMulipartedForm } from '@/helpers/form'
 import  ImageUpload from '@/components/ImageUpload'
 import axios from 'axios'
-//import { get, post } from '@/helpers/api'
+
 export default {
     components: {
         ImageUpload
     },
     data() {
         return {
-            form: {
-                
-                
-            },
-            
+            form: {},           
             error: {},
             isProcessing: false,
             initializeURL: `http://localhost:8000/api/photos/create`,
@@ -60,14 +56,20 @@ export default {
         }
     },
     created() {
-            console.log(this.$auth.user.name)
+            
             if(this.$route.meta.mode === 'edit') {
 				this.initializeURL = `http://localhost:8000/api/photos/${this.$route.params.id}/edit`
 				this.storeURL = `http://localhost:8000/api/photos/${this.$route.params.id}?_method=PUT`
 				this.action = 'Update'
 			}
-			//get(this.initializeURL)
-            axios.get(this.initializeURL)
+            
+            axios({
+                method: 'get', 
+                url: this.initializeURL,
+                headers: {
+                    Authorization: 'Bearer ' + this.$auth.accessToken
+                }
+                })
                 .then((res) => {
 					Vue.set(this.$data, 'form', res.data.form)
 				})
@@ -77,23 +79,6 @@ export default {
         save() {
             this.isProcessing = true
             const form = toMulipartedForm(this.form, this.$route.meta.mode)
-            
-            
-            // post(this.storeURL, form)
-            //     .then((res) => {
-            //         if(res.data.saved) {
-            //             Flash.setSuccess(res.data.message)
-            //             this.$router.push(`/photos/${res.data.id}`)
-            //         }
-            //         this.isProcessing = false
-            //     })
-            //     .catch((err) => {
-            //         if(err.response.status === 422) {
-            //             this.error = err.response.data.errors
-            //         }
-            //         this.isProcessing = false
-            //     })
-
 
             axios({
                 method: 'post',
@@ -103,7 +88,7 @@ export default {
                 'Authorization': `Bearer ${this.$auth.accessToken}`
                 }
                 }).then((res) => {
-                    //return console.log(res.data)
+                    
                     if(res.data.saved) {
                         Flash.setSuccess(res.data.message)
                         this.$router.push(`/photos/${res.data.id}`)

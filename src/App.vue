@@ -9,9 +9,17 @@
 					
           <a @click="$auth.login()">LOGIN/REGISTER</a>
 				</li>
+
+        <li class="navbar__item" v-if="auth">
+					<router-link to="/"><b>Welcome {{$auth.user.nickname}}</b></router-link>
+				</li>
 				
 				<li class="navbar__item" v-if="auth">
 					<router-link to="/photos/create">ADD PHOTO</router-link>
+				</li>
+
+        <li class="navbar__item" v-if="auth">
+					<router-link to="/bookmark">MY BOOKMARKS</router-link>
 				</li>
 				
 				<li class="navbar__item" v-if="auth" style="cursor:pointer;">
@@ -49,6 +57,9 @@ export default {
 				}
 				if(err.response.status === 404) {
 					this.$router.push('/not-found')
+				}
+        if(err.response.status === 401) {
+					this.$router.push('/unauthenticated')
 				}
 			})
       

@@ -3,7 +3,7 @@
 </template>
 
 <script>
-//import { post } from '@/helpers/api'
+
 import axios from 'axios'
 import Flash from '@/helpers/flash'
 export default {
@@ -37,10 +37,7 @@ export default {
             data: this.form
         }).then((res) => {
                 
-            if(res.data) {
-                //Flash.setSuccess('Congratulations! You have now successfully registered.')
-                console.log(res.data)
-                
+            if(res.data) {       
                 this.$router.push('/')
                 }
             this.isProcessing = false
@@ -53,27 +50,6 @@ export default {
                 
                 this.isProcessing = false
             });
-
-        
-        // post('http://localhost:8000/api/adduser', this.form)
-        //     .then((res) => {
-                
-        //         if(res.data) {
-        //             //Flash.setSuccess('Congratulations! You have now successfully registered.')
-        //             console.log(res.data)
-                    
-        //             this.$router.push('/')
-        //         }
-        //         this.isProcessing = false
-        //     })
-        //     .catch((err) => {
-        //         if(err.response.status === 422) {
-        //             this.error = err.response.data.errors
-        //             console.log(this.error)
-        //         }
-                
-        //         this.isProcessing = false
-        //     })
     
         }
     }
